@@ -1,13 +1,10 @@
+import 'package:bmi_calculator/home_screen.dart';
 import 'package:flutter/material.dart';
 
-class ResultScreen extends StatefulWidget {
-  const ResultScreen({super.key});
+class ResultScreen extends StatelessWidget {
+  const ResultScreen({super.key, required this.result});
+ final double result;
 
-  @override
-  State<ResultScreen> createState() => _ResultScreenState();
-}
-
-class _ResultScreenState extends State<ResultScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -17,6 +14,7 @@ class _ResultScreenState extends State<ResultScreen> {
           shadowColor: Colors.black,
           elevation: 5,
           backgroundColor: Color(0xff24263B),
+          foregroundColor: Colors.white,
           title: Center(
             child: Text('BMI Calculator',style:
             TextStyle(
@@ -55,21 +53,33 @@ class _ResultScreenState extends State<ResultScreen> {
               child: Column(
                 children: [
                   SizedBox(height: 40,),
-                  Text('Normal',
-                  style: TextStyle(
+                  Text( result<=18.5  ? "UnderWeight(abnormal)":
+                      result<=24.5   ?'Normal Weight(Healthy)':
+                          result<=29.9?'OverWeight(Abnormal)':
+                              result<=34.9? "Obesity class I (abnormal)":
+                                  result<=39.9? "Obesity class II (abnormal)":
+                                     "Obesity class III (abnormal)"
+                              ,style: TextStyle(
                     color: Colors.green,
                     fontWeight: FontWeight.bold,
-                    fontSize: 20,
-                  ),),
+                    fontSize:
+                      25,
+                  ),
+                  ),
                   SizedBox(height: 40,),
-                  Text('19.2',
+                  Text(result.toStringAsFixed(2),
                   style: TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.bold,
                     fontSize:64,
                   ),),
                   SizedBox(height: 40,),
-                  Text('You Have a Normal Body Weight,\nGood job',
+                  Text(result<=18.5  ? "Your body weight is underweighted (abnormal)":
+                  result<=24.5   ?"You have a normal body weight (Healthy)":
+                  result<=29.9?'Your body weight is OverWeight(Abnormal)':
+                  result<=34.9? "Your body weight is Obesity class I (abnormal)":
+                  result<=39.9? "your body weight is Obesity class II (abnormal)":
+                  "your body weight is Obesity class III (abnormal)",
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       color: Colors.white.withValues(alpha: .5),
@@ -84,7 +94,7 @@ class _ResultScreenState extends State<ResultScreen> {
       bottomNavigationBar: GestureDetector(
         onTap: (){
           Navigator.push(context,
-              MaterialPageRoute(builder: (context)=>ResultScreen()));
+              MaterialPageRoute(builder: (context)=>HomeScrren()));
         },
         child: GestureDetector(
           onTap: (){

@@ -1,11 +1,24 @@
+import 'dart:math';
+
 import 'package:bmi_calculator/result_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-class HomeScrren extends StatelessWidget {
+class HomeScrren extends StatefulWidget {
   const HomeScrren({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  State<HomeScrren> createState() => _HomeScrrenState();
+}
+
+class _HomeScrrenState extends State<HomeScrren> {
+  bool? isMale;
+  int height=100;
+  int weight=20;
+  int age=15;
+  double bmi=0;
+  @override
+  Widget build(BuildContext context)
+  {
     return Scaffold(
       backgroundColor: Color(0xff24263B),
       appBar: AppBar(
@@ -30,11 +43,18 @@ class HomeScrren extends StatelessWidget {
               children: [
                 Expanded(
                     child: ShadowContainer(
+        color:isMale==true ?Colors.pink:Color(0xff24263B),
+                      onTap: (){
+                        setState(() {
+                          isMale=true;
+                        });
+                      },
+
                         child:Column(
                           children: [
-                            Expanded(
-                              child: SvgPicture.asset('assets/icons/male.svg',),
-                            ),
+                             Expanded(
+                                child: SvgPicture.asset('assets/icons/male.svg',),
+                              ),
                             Text('Male',style: TextStyle(
                               color: Colors.white.withValues(alpha: .5),
                               fontSize: 20
@@ -43,23 +63,30 @@ class HomeScrren extends StatelessWidget {
                         ))),
                 SizedBox(width: 20,),
                 Expanded(
-                    child: ShadowContainer(
-                        child:Column(
-                          children: [
-                            Expanded(
-                              child: SvgPicture.asset('assets/icons/female.svg',
+                      child: ShadowContainer(
+                      color:isMale==false ?Colors.pink:Color(0xff24263B),
+                          onTap: (){
+                            setState(() {
+                              isMale=false;
+                            });
+                          },
+                          child:Column(
+                            children: [
+                              Expanded(
+                                child: SvgPicture.asset('assets/icons/female.svg',
+                                ),
                               ),
-                            ),
-                            Text('Female',style: TextStyle(
-                                color: Colors.white.withValues(alpha: .5),
-                                fontSize: 20
-                            ),)
-                          ],
-                        ))),
+                              Text('Female',style: TextStyle(
+                                  color: Colors.white.withValues(alpha: .5),
+                                  fontSize: 20
+                              ),)
+                            ],
+                          ))),
               ],
             ),
             SizedBox(height: 20,),
-            ShadowContainer(child:
+            ShadowContainer(color: Color(0xff24263B),
+            child:
              Column(
                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                children: [
@@ -67,7 +94,7 @@ class HomeScrren extends StatelessWidget {
                  color: Colors.white.withValues(alpha: .5),
                  fontSize: 20
              ),),
-               RichText(text: TextSpan(text: "150",
+               RichText(text: TextSpan(text: height.toString(),
                style: TextStyle(
                  fontSize: 35,
                  fontWeight: FontWeight.bold
@@ -81,19 +108,27 @@ class HomeScrren extends StatelessWidget {
                  Slider(
                      activeColor: Colors.pink,
                      // inactiveColor: Colors.pink,
-                     value: 0.35, onChanged: (NewValue){}),
+                     value: height.toDouble(),
+                     min: 50,
+                     max: 200,
+                     onChanged: (newValue){
+                       setState(() {
+                         height=newValue.toInt();
+                       });
+                     }),
                ],
              )),
             SizedBox(height: 20,),
           Row(
             children: [
               Expanded(
-                child: ShadowContainer(child: Column(
+                child: ShadowContainer(color: Color(0xff24263B),
+                child: Column(
                   children: [
-                Text('Weight',style: TextStyle(
+                Text('Weight(kg)',style: TextStyle(
                 color: Colors.white.withValues(alpha: .5),
                 fontSize: 25)),
-                Text('60',style: TextStyle(
+                Text(weight.toString(),style: TextStyle(
                 color: Colors.white,
                 fontSize: 35,
                 fontWeight: FontWeight.bold)),
@@ -101,52 +136,13 @@ class HomeScrren extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       IconButton(onPressed: (){},
-                          icon: Container(
-                              height: 50,
-                              width: 50,
-                              decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  color: Colors.grey
-                              ),
-                              child:Center(child:
-                              SvgPicture.asset('assets/icons/sub.svg',
-                                width: 21,
-                              ))
-                          )),
-
-                      IconButton(onPressed: (){},
-                          icon: Container(
-                              height: 50,
-                              width: 50,
-                              decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  color: Colors.grey
-                              ),
-                              child:Center(child:
-                              SvgPicture.asset('assets/icons/sum.svg',
-                                width: 21,
-                              ))
-                          )),
-                    ],
-                  )
-                  ],
-                )),
-              ),
-              Expanded(
-                child: ShadowContainer(child: Column(
-                  children: [
-                    Text('Age',style: TextStyle(
-                        color: Colors.white.withValues(alpha: .5),
-                        fontSize: 25)),
-                    Text('25',style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 35,
-                        fontWeight: FontWeight.bold)),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        IconButton(onPressed: (){},
-                            icon: Container(
+                          icon: GestureDetector(
+                            onTap: (){
+                              setState(() {
+                                weight--;
+                              });
+                            },
+                            child: Container(
                                 height: 50,
                                 width: 50,
                                 decoration: BoxDecoration(
@@ -157,10 +153,17 @@ class HomeScrren extends StatelessWidget {
                                 SvgPicture.asset('assets/icons/sub.svg',
                                   width: 21,
                                 ))
-                            )),
+                            ),
+                          )),
 
-                        IconButton(onPressed: (){},
-                            icon: Container(
+                      IconButton(onPressed: (){},
+                          icon: GestureDetector(
+                            onTap: (){
+                              setState(() {
+                                weight++;
+                              });
+                            },
+                            child: Container(
                                 height: 50,
                                 width: 50,
                                 decoration: BoxDecoration(
@@ -171,6 +174,67 @@ class HomeScrren extends StatelessWidget {
                                 SvgPicture.asset('assets/icons/sum.svg',
                                   width: 21,
                                 ))
+                            ),
+                          )),
+                    ],
+                  )
+                  ],
+                )),
+              ),
+              Expanded(
+                child: ShadowContainer(color: Color(0xff24263B),
+                child: Column(
+                  children: [
+                    Text('Age',style: TextStyle(
+                        color: Colors.white.withValues(alpha: .5),
+                        fontSize: 25)),
+                    Text(age.toString(),style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 35,
+                        fontWeight: FontWeight.bold)),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        IconButton(onPressed: (){},
+                            icon: GestureDetector(
+                              onTap: (){
+                              setState(() {
+                                age--;
+                              });
+                              },
+                              child: Container(
+                                  height: 50,
+                                  width: 50,
+                                  decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: Colors.grey
+                                  ),
+                                  child:Center(child:
+                                  SvgPicture.asset('assets/icons/sub.svg',
+                                    width: 21,
+                                  ))
+                              ),
+                            )),
+
+                        IconButton(onPressed: (){},
+                            icon: GestureDetector(
+                             onTap: (){
+                               setState(() {
+                                 age++;
+                               });
+                             },
+                              child: Container(
+                                  height: 50,
+                                  width: 50,
+                                  decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: Colors.grey
+                                  ),
+                                  child:Center(child:
+                                  SvgPicture.asset('assets/icons/sum.svg',
+                                    width: 21,
+                                  ))
+                              ),
                             )),
                       ],
                     )
@@ -184,8 +248,9 @@ class HomeScrren extends StatelessWidget {
       ),
       bottomNavigationBar: GestureDetector(
         onTap: (){
+          bmi=weight/pow((height/100), 2);
           Navigator.push(context,
-          MaterialPageRoute(builder: (context)=>ResultScreen()));
+          MaterialPageRoute(builder: (context)=>ResultScreen(result: bmi),));
         },
         child: Container(
           height: 90,
@@ -204,25 +269,30 @@ class HomeScrren extends StatelessWidget {
 }
 
 class ShadowContainer extends StatelessWidget {
-  const ShadowContainer({super.key, required this.child});
+  const ShadowContainer({super.key, required this.child,  this.onTap, required this.color});
 final Widget child;
+final Function()? onTap;
+final Color color;
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.all(16),
-      height: 200,
-      decoration: BoxDecoration(
-          color: Color(0xff24263B),
-          borderRadius: BorderRadius.circular(10),
-          boxShadow: [
-            BoxShadow(
-                color: Colors.black.withValues(alpha: .4),
-                spreadRadius: 1.5,
-                blurRadius: 10
-            )
-          ]
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: EdgeInsets.all(16),
+        height: 200,
+        decoration: BoxDecoration(
+            color: color,
+            borderRadius: BorderRadius.circular(10),
+            boxShadow: [
+              BoxShadow(
+                  color: Colors.black.withValues(alpha: .4),
+                  spreadRadius: 1.5,
+                  blurRadius: 10
+              )
+            ]
+        ),
+        child: child ,
       ),
-      child: child ,
     );
   }
 }
